@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Burger Heaven</title>
+    <meta charset="utf-8" />
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+
+    <!--MAP-->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+    <script src='https://api.mapbox.com/mapbox-gl-js/v0.52.0/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v0.52.0/mapbox-gl.css' rel='stylesheet' />
+    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v3.1.0/mapbox-gl-geocoder.min.js'></script>
+    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v3.1.0/mapbox-gl-geocoder.css'
+        type='text/css' />
+    <!--
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.49.0/mapbox-gl.css' rel='stylesheet' />
+
+-->
+
+
+
+    <!-- CSS FILES -->
+    <link href="css/deli-very.css" rel="stylesheet">
+    <link href="css/myStyle.css" rel="stylesheet">
+
+    <!-- Javascript files -->
+    <script src="js/menu.js" ></script>
+    <script src="/vue/vue.js" ></script>
+    <script src="/socket.io/socket.io.js" ></script>
+    <script src="js/deli-very.js" defer ></script>
+    <script src="js/js_script.js" defer></script>
+</head>
+<style>
+    .geocoder {
+        position: relative;;
+        z-index:1;
+        width:50%;
+        left:50%;
+        margin-left:-25%;
+        top:-287px;
+        }
+        
+   
+
+
+        .mapboxgl-ctrl-geocoder { min-width:100%; }
+        </style>
+
+
+
+
+
+
+
+<body>
+    <div id="app">
+
+        <div class="content">
+            <header> </header>
+            <div class="header-banner">
+                <h1>Burger Heaven</h1>
+                <div id="banderoller"></div>
+            </div>
+
+            <div id="burgerContainer">
+                <section class="burger-information-section">
+                    <main>
+                        <div id="selectBurger">
+                            <h1>{{burgerMessage}}</h1>
+                        </div>
+                        <br>
+
+                        <div class="wrapper" id="wrapper">
+                            <div class="row">
+                                <div v-for="(burger, key, index) in burgers" class="card-burger">
+                                    <div :id=" 'hamburger-' + key" class="burger-background">
+                                        <div class="box burger-heading"> {{burger.name}} </div>
+                                        <div class="box burger-img-container">
+                                            <img :src='burger.img' alt="burger.name" title="burger.name"></div>
+
+                                        <div class="box burger-desc-text" id="burger-supreme">
+                                            <ul>
+                                                <li> {{burger.kCal}} kCal</li>
+                                                <li v-if="burger.lactose"> Contains <span class="emph"> lactose </span></li>
+                                                <li v-if="burger.gluten">Contains <span class="emph">gluten</span></li>
+                                                <li> </li>
+                                            </ul>
+                                            <div class="burger-price"> {{ burger.price}} </div>
+                                            <div class="burger-checkbox" id="getBurgers">
+                                                <input type="checkbox" :id="'submit-'+key" v-bind:name="burger.name"
+                                                    style="display: none;" v-on:click="addBurger">
+                                                <label :for="'submit-'+key" class="check">
+                                                    <svg width="18px" height="18px" viewBox="0 0 18 18">
+                                                        <path d="M1,9 L1,3.5 C1,2 2,1 3.5,1 L14.5,1 C16,1 17,2 17,3.5 L17,14.5 C17,16 16,17 14.5,17 L3.5,17 C2,17 1,16 1,14.5 L1,9 Z"></path>
+                                                        <polyline points="1 9 7 14 15 4"></polyline>
+                                                    </svg>
+                                                </label>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+            </div>
+            </main>
+            </section>
+        </div>
+
+
+        <section id="contact-info">
+            <div id="customer-information">
+                <h3>Customer information</h3>
+                <p>This is where you provide necessary information</p>
+            </div>
+
+            <div id="as">
+                <div class="wrapp-info">
+                    <form class="vue-form">
+                        <fieldset>
+                            <div>
+                                <label class="label" for="name">Name</label>
+                                <input type="text" name="name" id="name" required="" v-model="name">
+                            </div>
+                            <div>
+                                <label class="label" for="email">Email</label>
+                                <input type="email" name="email" id="email" required="" :class="{ email , error: !email.valid }"
+                                    v-model="email.value">
+                            </div>
+
+                            <div>
+                                <label for="payment" class="label">Payment Options</label>
+                                <p class="select" id="payment-alternative">
+                                    <select class="budget" v-model="selection.payment">
+                                        <option value="Burger Heaven">Burger Heaven Card</option>
+                                        <option value="Bank Card">Bank Card</option>
+                                        <option value="Credit Card">Credit Card</option>
+                                        <option value="Swish">Swish</option>
+                                    </select>
+                                </p>
+                            </div>
+
+                            <div>
+                                <label for="gender" class="label">Gender</label>
+                                <ul class="vue-form-list">
+                                    <li>
+                                        <input type="radio" name="radio-1" id="radio-1" value="Male" v-model="selection.gender">
+                                        <label for="radio-1">Male</label>
+                                    </li>
+                                    <li>
+                                        <input type="radio" name="radio-2" id="radio-2" value="Female" v-model="selection.gender">
+                                        <label for="radio-3">Female</label>
+                                    </li>
+                                    <li>
+                                        <input type="radio" name="radio-4" id="radio-4" value="Undisclosed" v-model="selection.gender">
+                                        <label for="radio-2">Undisclosed</label>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div>
+                                <input type="text" name="isBurgerChosen" id="isBurgerChosen" required="" style="height:0px; margin:0; padding:0; border:none;"
+                                    :class="{ email , error: !isBurgerChosen }" v-model="isBurgerChosen">
+
+                                <input type="text" name="details" id="details" required="" style="height:0px; margin:0; padding:0; border:none;"
+                                    :class="{ details , error: !details.chosen }" v-model="details.chosen">
+
+                            </div>
+
+                            <div>
+                                <input id="submit-btn" type="submit" v-on:click="submit" value="Send Form">
+                            </div>
+                        </fieldset>
+                    </form>
+
+
+                    <div class="debug">
+                        <div class="Custumer details">
+                            <p class="heading-contact">Customer Details</p>
+
+                            <div>
+                                <p><span class="darker">Name:</span> {{name}}</p>
+                                <p><span class="darker">Email: </span> {{email.value}}</p>
+                                <p><span class="darker">Gender:</span> {{selection.gender}}</p>
+                                <p><span class="darker">Payment: </span> {{selection.payment}}</p>
+                                <p><span class="darker">Deliver to: </span> <span v-if="details.x !== -99">
+                                        {{details.x}}, {{details.y}} </span> </p>
+
+                            </div>
+                        </div>
+                        <div class="order-summary">
+                            <p class="heading-contact">Order Summary</p>
+                            <div>
+                                <div v-for="(burgers, key, index) in burgerChosen" class="shopped burgers">
+                                    <p><span class="darker"> </span> {{burgers}} </p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="delivery-map-section">
+            <div class="delivery-map-heading">
+                <h2>Select Delivery Location</h2>
+            </div>
+            <div class="view-box">
+                <div id="dots" v-on:click="displayOrder">
+                    <span v-if="details.chosen">
+                        <div v-for="(d, key) in details" v-bind:style="{ left: details.x + 'px', top: details.y + 'px'}">
+                            {{orderId}}
+                        </div>
+                    </span>
+                </div>
+            </div>
+        </section>
+
+        <section>
+
+
+
+                <div>
+                        <div id='map' style='width: 400px; height: 300px;'></div>
+                        <div id="geocoder" class="geocoder">
+                            <div class="mapboxgl-ctrl-geocoder mapboxgl-ctrl" style="display: none !important;">
+                                <span class="geocoder-icon geocoder-icon-search" id="findCoord"> 
+                
+                                </span>
+                                <!--Target this-->
+                                <input type="text" placeholder="Search"  >
+                                <ul class="suggestions" style="display: none;">
+                
+                                </ul>
+                                <div class="geocoder-pin-right">
+                                    <button class="geocoder-icon geocoder-icon-close" aria-label="Clear">
+                
+                                    </button>
+                                    <span class="geocoder-icon geocoder-icon-loading"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="future"></div>
+                        <form id="form" id="chat_form">
+                            <input id="chat_input" type="text">
+                            <button v-on:click="SendCoord">
+                                {{coordinates}}
+                            </button>
+                        </form>
+                
+                        
+                        
+                    </div>
+            
+            
+            
+            
+            
+                <div class='flex-child flex-child--grow px12 py12 scroll-auto'>
+                        <pre  id='json-response' class='txt-xs px12'>Search for a place. Your results will be displayed here!</pre>
+                      </div>
+            
+                
+
+
+        </section>
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script>
+        $(function() {
+
+            
+            
+        // Create SocketIO instance, connect
+        
+        var socket = io('http://localhost:3000');
+        socket.connect(); 
+        
+        // Add a connect listener
+        socket.on('connect',function() {
+            console.log('Client has connected to the server!');
+        });
+        // Add a connect listener
+        socket.on('message',function(data) {
+            console.log('Received a message from the server!',data);
+        });
+        // Add a disconnect listener
+        socket.on('disconnect',function() {
+            console.log('The client has disconnected!');
+        });
+        
+        // Sends a message to the server via sockets
+        function sendMessageToServer(message) {
+            socket.send(message);
+        }
+
+        
+
+            /*
+            socket.on('broad', function(data) {
+                    $('#future').append(data+ "<br/>");
+              });
+           
+            $('form').submit(function(e){
+                e.preventDefault();
+                var message = $('#chat_input').val();
+                socket.emit('messages', message);
+            }); 
+            */
+
+
+
+
+
+
+    
+
+    // For the map
+    mapboxgl.accessToken =
+    'pk.eyJ1IjoibWszam9obnNvbiIsImEiOiJjanJzNnhoY3cwOGtyNDRucDVhNzZ3ODRnIn0.bK4vEw0PUpkBg4HaqLBInw';
+    var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/streets-v9',
+    // Longitute, Latitude
+    center: [17.59333, 59.849646],
+    zoom: 12
+});
+
+ // Add geocoder
+        // Access: https://docs.mapbox.com/help/demos/how-mapbox-works/how-geocoding-works.html
+        // ... For more information and locations 
+        var geocoder = new MapboxGeocoder({
+          accessToken: mapboxgl.accessToken,
+          countries: 'se',
+          // further limit results to the geographic bounds representing the region of
+          // Furtherst of sweden, "Långe Jan" to furthest up "Karhuniemivägen"
+          // bbox: [16.398895, 56.196217, 20.197534,67.876346]
+      });
+
+
+
+
+       
+
+
+       
+
+    
+
+        geocoder.on('result', function(ev) {
+            map.getSource('single-point').setData(ev.result.geometry);
+            console.log(ev.result);
+            var styleSpec = ev.result;
+            this.coordinates = styleSpec;
+            var styleSpecBox = document.getElementById('json-response');
+            var styleSpecText = JSON.stringify(styleSpec, null, 2);
+            //socket.send(styleSpecText);
+            var syntaxStyleSpecText = syntaxHighlight(styleSpecText);
+            styleSpecBox.innerHTML = syntaxStyleSpecText;
+            function SendCoord() {
+                socket.send(styleSpecText);
+            };
+    
+          });
+
+       document.getElementById('geocoder').appendChild(geocoder.onAdd(map));
+
+
+        // Test to log json objects
+        map.on('load', function() {
+            map.addSource('single-point', {
+                "type": "geojson",
+                "data": {
+                    "type": "FeatureCollection",
+                    "features": []
+                }
+            });
+        
+            map.addLayer({
+                "id": "point",
+                "source": "single-point",
+                "type": "circle",
+                "paint": {
+                    "circle-radius": 6,
+                    "circle-color": "#007cbf"
+                }
+            });
+        
+            // Listen for the `geocoder.input` event that is triggered when a user
+            // makes a selection and add a symbol that matches the result.
+            
+        });
+
+
+
+
+
+        function syntaxHighlight(json) {
+            json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+                var cls = 'number';
+                if (/^"/.test(match)) {
+                    if (/:$/.test(match)) {
+                        cls = 'key';
+                    } else {
+                        cls = 'string';
+                    }
+                } else if (/true|false/.test(match)) {
+                    cls = 'boolean';
+                } else if (/null/.test(match)) {
+                    cls = 'null';
+                }
+                return '<span class="' + cls + '">' + match + '</span>';
+            });
+        };
+
+        
+
+
+
+    
+        });
+
+    </script>
+
+
+
+
+
+
+    <hr>
+
+    <footer>
+        <p> &#169; Burger Inc.
+    </footer>
+
+</body>
+
+</html>

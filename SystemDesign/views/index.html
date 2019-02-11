@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Burger Heaven</title>
+    <meta charset="utf-8" />
+
+    <!-- CSS FILES -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+        crossorigin="anonymous">
+    <link href="css/deli-very.css" rel="stylesheet">
+    <link href="css/myStyle.css" rel="stylesheet">
+
+    <!-- Javascript files -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+        crossorigin="anonymous"></script>
+    <script src="js/menu.js" defer></script>
+    <script src="/vue/vue.js" defer></script>
+    <script src="/socket.io/socket.io.js" defer></script>
+    <script src="js/deli-very.js" defer></script>
+    <script src="js/js_script.js" defer></script>
+</head>
+
+
+
+<style>
+    .header-image {
+        background: url("img/WallpaperStock.jpg") no-repeat center center fixed;
+        background-repeat: no-repeat;
+        background-size: auto;
+        height: 150vh;
+        background-repeat: no-repeat;
+        -webkit-background-size: cover;
+        -moz-background-size: cover;
+        -o-background-size: cover;
+        background-size: cover;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .gray {
+        background: rgba(62, 70, 78, 0.4);
+        overflow: hidden;
+        height: 100%;
+        z-index: 2;
+    }
+
+    .overlay {
+        margin-top: 250px;
+        left: 0px;
+        position: fixed;
+        top: -40px;
+        width: 100vw;
+    }
+
+    .main-logo {
+        top: -200px;
+    }
+
+    .main-logo h1 {
+        margin: 0 auto;
+        display: table;
+        color: #fff;
+        font-size: 65px;
+    }
+
+    .row {
+        width: 70%;
+        margin: 0 auto;
+    }
+
+    .wrapper {
+        margin-top: 275px;
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+
+    .card-burger {
+        margin-top: 110px;
+        width: 325px;
+        text-align: center;
+        height: 100px;
+        position: relative;
+    }
+
+    .card-burger:hover {
+        cursor: pointer;
+    }
+
+    .card-burger::after {
+        top: -55px;
+    position: relative;
+    content: "Find Out More";
+    color: #e0e0e0;
+    }
+
+    .hej {
+        position: relative;
+    top: -111px;
+    color: #f15ca9;
+    font-size: 36px;
+    letter-spacing: 1.3px;
+    text-shadow: 0px 2px 0px rgba(0, 0, 0, 0.52);
+    }
+
+    .burger-background {
+        position: relative;
+        top: -100px;
+    }
+
+
+    .info-links {
+        color: #f15ca9;
+        transition: 200ms
+    }
+
+    a:hover {
+        text-decoration: none;
+        color: #ff96cc;        
+    }
+
+    @media screen and (max-width: 1260px) {
+        .wrapper {
+            margin-top: 0;
+        }
+
+        .row {
+            width: 34%;
+        }
+      }
+
+</style>
+
+
+<body>
+    <div id="app">
+
+        <header>
+            <div class="header-image">
+                <div class="gray">
+
+
+
+                </div>
+            </div>
+        </header>
+        <section>
+            <div class="overlay main-logo">
+
+                <h1>
+                    Send Box Inc
+                </h1>
+            </div>
+            <div class="overlay">
+
+                <div class="wrapper" id="wrapper">
+                    <div class="row">
+
+
+
+
+                        
+     
+                        <div class="card-burger" id="card1">
+                                <span class="hej"><a href="/customer" class="info-links">Customer</a></span>
+                            <div class="burger-background">
+
+                                <div class="box burger-heading"> asdasdasdasd</div>
+                                <div class="box burger-img-container">
+                                    <!-- <img alt="burger.name" title="burgername"> -->
+                                </div>
+
+                                <div class="box burger-desc-text">
+                                    <p>
+                                        Send your package all over the world with the great service of "Send box Inc".
+                                    </p>
+                                     <!-- <div class="burger-price">  </div> -->
+                                </div>
+
+                            </div>
+                        </div>
+                    
+
+
+
+
+
+
+                        <div class="card-burger" id="card2">
+                                <span class="hej"><a href="/administrator" class="info-links">Dispatcher</a></span>
+                            <div class="burger-background">
+                                <div class="box burger-heading"> aasaa</div>
+                                <div class="box burger-img-container">
+                                    <!-- <img alt="burger.name" title="burgername"> -->
+                                </div>
+
+                                <div class="box burger-desc-text">
+                                        <p>
+                                                Handle the tracking of packages and monitor available drivers.
+                                            </p>
+                                    <!-- <div class="burger-price">  </div> -->
+                                </div>
+
+                            </div>
+                        </div>
+                    
+
+
+
+                
+
+                        <div class="card-burger" id="card3">
+                                <span class="hej"><a href="/driver" class="info-links">Driver</a></span>
+                            <div class="burger-background">
+                                <div class="box burger-heading"> aasaa</div>
+                                <div class="box burger-img-container">
+                                    <!-- <img alt="burger.name" title="burgername"> -->
+                                </div>
+                                <div class="box burger-desc-text">
+                                        <p>
+                                                Find your driving route for the day for our drivers
+                                            </p>
+                                    <!-- <div class="burger-price">  </div> -->
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+
+            </div>
+        </section>
+    </div>
+    <hr>
+
+    <footer>
+        <p> &#169; Burger Inc.
+    </footer>
+
+
+
+    <script>
+            $(function() {
+
+                 // Create SocketIO instance, connect
+                var socket = io();
+                socket.connect(); 
+                
+                // Add a connect listener
+                socket.on('connect',function() {
+                    console.log('Client has connected to the server!');
+                });
+                // Add a connect listener
+                socket.on('message',function(data) {
+                    console.log('Received a message from the server!',data);
+                });
+                // Add a disconnect listener
+                socket.on('disconnect',function() {
+                    console.log('The client has disconnected!');
+                });
+                
+                // Sends a message to the server via sockets
+                function sendMessageToServer(message) {
+                    socket.send(message);
+                }
+
+
+
+
+
+
+
+                console.log( "ready!" );
+
+                $('#card1').click(function(){
+                    document.location.href = "/customer";
+                });
+
+                $('#card2').click(function(){
+                    document.location.href = "/administrator";
+                });
+
+                $('#card3').click(function(){
+                    document.location.href = "/driver";
+                });
+
+
+            });
+    </script>
+</body>
+
+</html>
